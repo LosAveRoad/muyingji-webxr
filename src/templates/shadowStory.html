@@ -1,11 +1,14 @@
 <a-entity id="shadowStoryStage" shadow-story position="0 0 -6">
-  <!-- 三层背景以不同 Z 深度进入舞台：远天、月、近园。 -->
-  <a-plane class="storyAsset" data-story-id="backdrop" data-entry="down"
+  <!-- 三幕底景逐幕入场与退场，避免同一舞台反复使用或持续堆积。 -->
+  <a-plane class="storyAsset" data-story-id="act1bg" data-entry="down"
     width="11.6" height="6.5" position="0 0 -0.9"
-    material="shader: flat; src: url(assets/shadowplay/stage/s1-back.png); transparent: true; opacity: 0"></a-plane>
-  <a-circle class="storyAsset" data-story-id="moon" data-entry="down"
-    radius="1.05" position="0 1.55 -0.72"
-    material="shader: flat; color: #d8ab4e; transparent: true; opacity: 0"></a-circle>
+    material="shader: flat; src: url(assets/shadowplay/stage/generated/act-1-courtyard.webp); transparent: true; opacity: 0"></a-plane>
+  <a-plane class="storyAsset" data-story-id="act2bg" data-entry="down"
+    width="11.6" height="6.5" position="0 0 -0.89"
+    material="shader: flat; src: url(assets/shadowplay/stage/generated/act-2-mountain-pass.webp); transparent: true; opacity: 0"></a-plane>
+  <a-plane class="storyAsset" data-story-id="act3bg" data-entry="down"
+    width="11.6" height="6.5" position="0 0 -0.88"
+    material="shader: flat; src: url(assets/shadowplay/stage/generated/act-3-lakeside-pavilion.webp); transparent: true; opacity: 0"></a-plane>
   <a-image class="storyAsset" data-story-id="garden" data-entry="left"
     src="assets/shadowplay/library/material-22.webp"
     width="5.2" height="5.2" position="-3.25 -0.05 -0.55"
@@ -52,12 +55,14 @@
     <a-entity mixin="font" position="0 -0.1 0.03"
       text="value: THE END; align: center; width: 3.2; color: #D4AF37"></a-entity>
     <a-entity id="shadowReplayButton" position="0 -0.72 0.04"
-      geometry="primitive: plane; width: 2.45; height: 0.42"
-      material="shader: flat; color: #D4AF37"
       animation__hoverin="property: scale; to: 1.06 1.06 1.06; dur: 120; startEvents: mouseenter"
       animation__hoverout="property: scale; to: 1 1 1; dur: 120; startEvents: mouseleave">
-      <a-entity mixin="font" position="0 -0.08 0.02"
-        text="value: REPLAY SHADOW PLAY; align: center; width: 2.15; color: #050403"></a-entity>
+      <a-plane width="2.5" height="0.48"
+        material="shader: flat; color: #D4AF37"></a-plane>
+      <a-plane width="2.4" height="0.38" position="0 0 0.01"
+        material="shader: flat; color: #050403"></a-plane>
+      <a-entity mixin="font" position="0 -0.08 0.03"
+        text="value: REPLAY; align: center; width: 2; color: #D4AF37"></a-entity>
     </a-entity>
   </a-entity>
 </a-entity>

@@ -1,24 +1,27 @@
 const STORY = [
   // 序：月下开卷。每一项严格对应一次击打、一个资产、一个动作意图。
-  ['backdrop', 'enter'], ['moon', 'enter'], ['garden', 'enter'],
-  ['garden', 'perform'],
+  ['act1bg', 'enter'], ['act1bg', 'perform'],
+  ['garden', 'enter'], ['garden', 'perform'],
 
   // 第一幕：侠客入园，发现密函。
   ['hero', 'enter'], ['desk', 'enter'], ['hero', 'walk'],
   ['desk', 'perform'], ['hero', 'hi'], ['desk', 'exit'], ['garden', 'exit'],
+  ['act1bg', 'exit'],
 
   // 第二幕：强敌现身，追逐交锋。
-  ['rock', 'enter'], ['villain', 'enter'], ['villain', 'hi'],
-  ['hero', 'run'], ['villain', 'run'], ['hero', 'exit'],
+  ['act2bg', 'enter'], ['act2bg', 'perform'], ['rock', 'enter'],
+  ['villain', 'enter'], ['villain', 'hi'], ['hero', 'run'],
+  ['villain', 'run'], ['hero', 'exit'],
 
   // 第三幕：女将从月下赶来，三人决战。
   ['general', 'enter'], ['general', 'flying'], ['hero', 'hi'],
   ['villain', 'hi'], ['general', 'run'], ['villain', 'exit'], ['rock', 'exit'],
+  ['act2bg', 'exit'], ['act3bg', 'enter'], ['act3bg', 'perform'],
 
   // 尾声：老者揭示密函，众人离场，舞台收卷。
   ['elder', 'enter'], ['hero', 'enter'], ['elder', 'hi'], ['hero', 'hi'],
   ['general', 'hi'], ['elder', 'exit'], ['general', 'exit'],
-  ['hero', 'exit'], ['moon', 'exit'], ['backdrop', 'exit']
+  ['hero', 'exit'], ['act3bg', 'exit']
 ];
 
 const OFFSTAGE = {
