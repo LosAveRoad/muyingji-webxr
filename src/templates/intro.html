@@ -1,15 +1,4 @@
 <a-entity
-  id="mainLogo"
-  geometry="primitive: plane; width: 9; height: 1.125"
-  material="shader: flat; src: #logoImg; transparent: true; depthTest: false; blending: additive; opacity: 0"
-  position="0 3.3 -2.5"
-  rotation="0 0 0"
-  scale="0.8 0.8 0.8"
-  bind__visible="introActive"
-  animation__opacity="property: components.material.material.opacity; from: 0; to: 1; dur: 2000; delay: 1000"
-  animation__position="property: object3D.position.y; to: 3.4; dur: 2000; easing: easeInOutQuad; startEvents: startgame"></a-entity>
-
-<a-entity
   id="startButton"
   bind__visible-raycastable="introActive"
   geometry="primitive: plane; width: 1; height: 0.35"
