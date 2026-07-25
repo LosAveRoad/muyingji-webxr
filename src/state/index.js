@@ -108,6 +108,8 @@ AFRAME.registerState({
     isLoading: false,  // Entire song loading process after selected (ZIP + process).
     isMenuOpening: false,
     isPaused: false,  // Playing, but paused. Not active during menu.
+    isPerformanceEnded: false,
+    isPerformanceReview: false,
     isPlaying: false,  // Actively playing (slicing beats).
     isSearching: false,  // Whether search is open.
     isSongProcessing: false,
@@ -364,6 +366,8 @@ AFRAME.registerState({
       state.isPaused = false;
       state.isLoading = true;
       state.isVictory = false;
+      state.isPerformanceEnded = false;
+      state.isPerformanceReview = false;
       state.leaderboardQualified = false;
     },
 
@@ -706,10 +710,8 @@ AFRAME.registerState({
 
     songcomplete: state => {
       state.challenge.isBeatsPreloaded = false;
-      state.challenge.id = '';
-      state.introActive = true;
       state.isLoading = false;
-      document.dispatchEvent(new CustomEvent('moonriderlanding'));
+      state.isPerformanceEnded = true;
     },
 
     songloadcancel: state => {
@@ -768,6 +770,18 @@ AFRAME.registerState({
       state.gameMode = 'classic';
       state.isLoading = true;
       state.loadingText = 'Loading...';
+      state.isPerformanceEnded = false;
+      state.isPerformanceReview = false;
+    },
+
+    performancereplay: state => {
+      state.isPerformanceEnded = false;
+      state.isPerformanceReview = true;
+    },
+
+    performancereviewend: state => {
+      state.isPerformanceEnded = true;
+      state.isPerformanceReview = false;
     },
 
     victoryfake: state => {
@@ -799,10 +813,11 @@ AFRAME.registerState({
     state.isPlaying =
       !state.menuActive && !state.isLoading && !state.isPaused && !state.isVictory &&
       !state.isGameOver && !state.isZipFetching && !state.isSongProcessing &&
+      !state.isPerformanceEnded && !state.isPerformanceReview &&
       !!state.challenge.id && !state.introActive;
 
     const anyMenuOpen = state.menuActive || state.isPaused || state.isVictory ||
-      state.isGameOver || state.isLoading || state.introActive;
+      state.isGameOver || state.isLoading || state.introActive || state.isPerformanceEnded;
     state.leftRaycasterActive = anyMenuOpen && state.activeHand === 'left' && state.inVR;
     state.rightRaycasterActive = anyMenuOpen && state.activeHand === 'right' && state.inVR;
 

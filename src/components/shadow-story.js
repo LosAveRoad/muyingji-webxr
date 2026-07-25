@@ -30,6 +30,10 @@ const OFFSTAGE = {
 AFRAME.registerComponent('shadow-story', {
   init: function () {
     this.step = 0;
+    this.performance = [];
+    this.reviewIndex = 0;
+    this.reviewAudio = new Audio('assets/shadowplay/audio/xiakexing.mp3');
+    this.reviewAudio.preload = 'auto';
     this.assets = {};
     Array.from(this.el.querySelectorAll('.storyAsset')).forEach(el => {
       const id = el.getAttribute('data-story-id');
@@ -48,13 +52,34 @@ AFRAME.registerComponent('shadow-story', {
         rotation: el.object3D.rotation.z,
         targetRotation: el.object3D.rotation.z,
         baseScale: el.object3D.scale.clone(),
+        materials: [],
+        lastAppliedOpacity: -1,
         pulse: 0
       };
     });
     this.onHit = this.onHit.bind(this);
-    this.onStart = this.reset.bind(this);
+    this.onStart = this.onStart.bind(this);
+    this.onComplete = this.onComplete.bind(this);
+    this.onReplay = this.onReplay.bind(this);
+    this.onReviewEnded = this.onReviewEnded.bind(this);
     this.el.sceneEl.addEventListener('beathit', this.onHit);
     this.el.sceneEl.addEventListener('startgame', this.onStart);
+    this.el.sceneEl.addEventListener('songcomplete', this.onComplete);
+    this.el.sceneEl.addEventListener('performancereplay', this.onReplay);
+    this.reviewAudio.addEventListener('ended', this.onReviewEnded);
+    const replayButton = this.el.querySelector('#shadowReplayButton');
+    if (replayButton) {
+      replayButton.addEventListener('click', () => {
+        this.el.sceneEl.emit('performancereplay', null, false);
+      });
+    }
+    this.reset();
+  },
+
+  onStart: function () {
+    this.performance = [];
+    this.setCleanReview(false);
+    this.showEndCard(false);
     this.reset();
   },
 
@@ -79,6 +104,9 @@ AFRAME.registerComponent('shadow-story', {
     const [id, intent] = STORY[this.step++];
     const asset = this.assets[id];
     if (!asset) { return; }
+    const song = this.el.sceneEl.components.song;
+    const at = song && song.isAudioPlaying ? Math.max(0, song.getCurrentTime()) : performance.now() / 1000;
+    this.performance.push({at, id, intent});
     this.applyIntent(asset, intent);
 
     const flash = this.el.querySelector('#shadowHitFlash');
@@ -88,6 +116,77 @@ AFRAME.registerComponent('shadow-story', {
         easing: 'easeOutQuad'
       });
     }
+  },
+
+  onComplete: function () {
+    this.forceExit();
+    window.setTimeout(() => this.showEndCard(true), 700);
+  },
+
+  onReplay: function () {
+    this.showEndCard(false);
+    this.setCleanReview(true);
+    this.reset();
+    this.reviewIndex = 0;
+    const firstAt = this.performance.length ? this.performance[0].at : 0;
+    this.reviewSequence = (this.performance.length ? this.performance : STORY.map((item, index) => ({
+      at: index * 0.42,
+      id: item[0],
+      intent: item[1]
+    }))).map(item => ({
+      at: Math.max(0, item.at - firstAt),
+      id: item.id,
+      intent: item.intent
+    }));
+    this.reviewAudio.currentTime = 0;
+    this.reviewAudio.volume = 0.58;
+    const playPromise = this.reviewAudio.play();
+    if (playPromise) {
+      playPromise.catch(err => {
+        console.error('[shadow-story] Replay audio could not start.', err);
+        this.onReviewEnded();
+      });
+    }
+  },
+
+  onReviewEnded: function () {
+    this.forceExit();
+    this.setCleanReview(false);
+    this.showEndCard(true);
+    this.el.sceneEl.emit('performancereviewend', null, false);
+  },
+
+  forceExit: function () {
+    Object.values(this.assets).forEach(asset => {
+      const off = OFFSTAGE[asset.side] || OFFSTAGE.down;
+      asset.target.copy(off);
+      asset.targetOpacity = 0;
+      if (asset.kind === 'actor') {
+        asset.el.emit('puppet-action', {action: 'walk'}, false);
+      }
+    });
+  },
+
+  showEndCard: function (visible) {
+    const card = this.el.querySelector('#shadowEndCard');
+    if (card) { card.setAttribute('visible', visible); }
+    const button = this.el.querySelector('#shadowReplayButton');
+    if (button) {
+      if (visible) {
+        button.setAttribute('raycastable', '');
+      } else {
+        button.removeAttribute('raycastable');
+      }
+    }
+  },
+
+  setCleanReview: function (enabled) {
+    ['#beatContainer', '#wallContainer', '#controllerRig', '#curve'].forEach(selector => {
+      const el = this.el.sceneEl.querySelector(selector);
+      if (el) { el.object3D.visible = !enabled; }
+    });
+    const debris = this.el.sceneEl.querySelector('#rigContainer');
+    if (debris) { debris.object3D.visible = false; }
   },
 
   applyIntent: function (asset, intent) {
@@ -124,17 +223,34 @@ AFRAME.registerComponent('shadow-story', {
   },
 
   setOpacity: function (asset, opacity) {
-    asset.el.object3D.traverse(node => {
-      if (!node.isMesh || !node.material) { return; }
-      const materials = Array.isArray(node.material) ? node.material : [node.material];
-      materials.forEach(material => {
-        material.transparent = true;
-        material.opacity = opacity;
+    if (!asset.materials.length) {
+      const unique = new Set();
+      asset.el.object3D.traverse(node => {
+        if (!node.isMesh || !node.material) { return; }
+        const materials = Array.isArray(node.material) ? node.material : [node.material];
+        materials.forEach(material => unique.add(material));
       });
+      asset.materials = Array.from(unique);
+    }
+    if (Math.abs(asset.lastAppliedOpacity - opacity) < 0.008) { return; }
+    asset.materials.forEach(material => {
+      material.transparent = true;
+      material.opacity = opacity;
     });
+    asset.lastAppliedOpacity = opacity;
   },
 
   tick: function (time, delta) {
+    if (this.reviewAudio && !this.reviewAudio.paused && this.reviewSequence) {
+      while (
+        this.reviewIndex < this.reviewSequence.length &&
+        this.reviewSequence[this.reviewIndex].at <= this.reviewAudio.currentTime
+      ) {
+        const event = this.reviewSequence[this.reviewIndex++];
+        const asset = this.assets[event.id];
+        if (asset) { this.applyIntent(asset, event.intent); }
+      }
+    }
     const amount = Math.min(1, delta / 180);
     Object.values(this.assets).forEach(asset => {
       const object = asset.el.object3D;
@@ -165,5 +281,9 @@ AFRAME.registerComponent('shadow-story', {
   remove: function () {
     this.el.sceneEl.removeEventListener('beathit', this.onHit);
     this.el.sceneEl.removeEventListener('startgame', this.onStart);
+    this.el.sceneEl.removeEventListener('songcomplete', this.onComplete);
+    this.el.sceneEl.removeEventListener('performancereplay', this.onReplay);
+    this.reviewAudio.removeEventListener('ended', this.onReviewEnded);
+    this.reviewAudio.pause();
   }
 });

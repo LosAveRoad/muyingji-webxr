@@ -40,4 +40,24 @@
     material="shader: flat; color: #f0c060; transparent: true; opacity: 0"></a-plane>
   <a-plane width="10.8" height="6.08" position="0 0 0.12"
     material="shader: flat; src: url(assets/shadowplay/stage/s1-front.png); transparent: true; opacity: 0.42"></a-plane>
+
+  <!-- 演出结束标志与纯净回看入口。 -->
+  <a-entity id="shadowEndCard" position="0 0.15 0.42" visible="false">
+    <a-plane width="5.6" height="2.7"
+      material="shader: flat; color: #050403; transparent: true; opacity: 0.94"
+      animation__enter="property: scale; from: 0.82 0.82 0.82; to: 1 1 1; dur: 420; easing: easeOutBack"></a-plane>
+    <a-image src="#logoImg"
+      width="4.2" height="1.14" position="0 0.58 0.02"
+      material="shader: flat; transparent: true"></a-image>
+    <a-entity mixin="font" position="0 -0.1 0.03"
+      text="value: THE END; align: center; width: 3.2; color: #D4AF37"></a-entity>
+    <a-entity id="shadowReplayButton" position="0 -0.72 0.04"
+      geometry="primitive: plane; width: 2.45; height: 0.42"
+      material="shader: flat; color: #D4AF37"
+      animation__hoverin="property: scale; to: 1.06 1.06 1.06; dur: 120; startEvents: mouseenter"
+      animation__hoverout="property: scale; to: 1 1 1; dur: 120; startEvents: mouseleave">
+      <a-entity mixin="font" position="0 -0.08 0.02"
+        text="value: REPLAY SHADOW PLAY; align: center; width: 2.15; color: #050403"></a-entity>
+    </a-entity>
+  </a-entity>
 </a-entity>
