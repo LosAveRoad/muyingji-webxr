@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const enableStart = () => {
     startButton.disabled = false;
-    startButton.textContent = 'START';
+    startButton.textContent = '开演';
   };
 
   if (scene.hasLoaded) {

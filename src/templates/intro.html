@@ -20,11 +20,13 @@
   play-sound__click="event: click; sound: #confirmSound;  volume: 0.25"
   material="shader: flat; color: #050403; opacity: 0.96; transparent: true"
   animation="property: components.material.material.opacity; from: 0; to: 0.96; dur: 500; delay: 900">
-  <a-entity
+  <a-image
     id="startButtonLabel"
-    mixin="font"
-    text="value: START; color: #D4AF37; align: center; width: 1; wrapCount: 12; opacity: 0"
-    position="0 -0.1 0.01"
-    animation="property: components.text.material.uniforms.opacity.value; from: 0; to: 1; dur: 500; delay: 1100"
-    ></a-entity>
+    src="#startCalligraphyImg"
+    width="0.58"
+    height="0.28"
+    position="0 0 0.01"
+    material="shader: flat; transparent: true; opacity: 0"
+    animation="property: components.material.material.opacity; from: 0; to: 1; dur: 500; delay: 1100"
+    ></a-image>
 </a-entity>
