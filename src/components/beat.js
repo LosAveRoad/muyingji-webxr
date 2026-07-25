@@ -465,21 +465,9 @@ AFRAME.registerComponent('beat', {
     explodeEventDetail.position.copy(this.el.object3D.position);
     rig.worldToLocal(explodeEventDetail.position);
 
-    let brokenPoolName;
-    if (this.data.type === MINE) {
-      brokenPoolName = 'pool__beat-broken-mine';
-    } else {
-      const mode = this.beatSystem.data.gameMode === CLASSIC ? 'beat' : PUNCH;
-      brokenPoolName = `pool__${mode}-broken-${this.data.color}`;
-      if (this.data.type === DOT) {
-        brokenPoolName += '-dot';
-      }
-    }
-
-    this.broken = this.el.sceneEl.components[brokenPoolName].requestEntity();
-    if (this.broken) {
-      this.broken.emit('explode', this.explodeEventDetail, false);
-    }
+    // 幕影记以皮影表演作为击打反馈，不再生成旧版音符碎块。
+    // 这些碎块的着色器与新版 A-Frame 不兼容，也会持续占用移动端 GPU。
+    this.broken = null;
 
     if (this.beatSystem.data.gameMode === CLASSIC && correctHit) {
       weaponEl.components.trail.pulse();

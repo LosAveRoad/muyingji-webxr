@@ -14,7 +14,6 @@
   debug-song-time
   debug-state
   hack
-  gpu-preloader
   {% if DEBUG_INSPECTOR %}
     inspector="url: http://localhost:3333/dist/aframe-inspector.js"
   {% endif %}
@@ -103,12 +102,7 @@
 
     <require path="templates/stageFollow.html"></require>
     <!-- Beat pieces, explosions, fx, and weapon trail. -->
-    <a-entity id="rigContainer"></a-entity>
-
-    <!-- Supercut FX rings. -->
-    {% for i in range(1, 5) %}
-      <a-entity class="superCutFx" mixin="superCut"></a-entity>
-    {% endfor %}
+    <a-entity id="rigContainer" visible="false"></a-entity>
 
     <!-- Player. -->
     <a-entity id="cameraRig">

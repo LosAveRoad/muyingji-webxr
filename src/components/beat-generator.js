@@ -385,10 +385,10 @@ AFRAME.registerComponent('beat-generator', {
         this.stageColors.setColor('floor', event._value);
         break;
       case 8:
-        this.tube.emit('pulse', null, false);
+        if (this.tube) { this.tube.emit('pulse', null, false); }
         break;
       case 9:
-        this.tube.emit('pulse', null, false);
+        if (this.tube) { this.tube.emit('pulse', null, false); }
         break;
       case 12:
         this.stageColors.setColor('leftglow', event._value);
