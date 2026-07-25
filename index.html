@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>幕影记</title>
+    <meta name="og:title" content="幕影记">
+    <meta name="twitter:title" content="幕影记">
+
+    <meta name="description" content="幕影记：以中国皮影戏讲述故事的 WebXR 音乐互动体验。">
+    <meta name="og:description" content="幕影记：以中国皮影戏讲述故事的 WebXR 音乐互动体验。">
+    <meta name="twitter:description" content="幕影记：以中国皮影戏讲述故事的 WebXR 音乐互动体验。">
+    <meta name="twitter:card" content="summary">
+
+    <meta property="og:image" content="https://supermedium.com/moonrider/assets/img/splash.jpg">
+    <meta property="twitter:image" content="https://supermedium.com/moonrider/assets/img/splash.jpg">
+
+    <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon">
+    <script src="vendor/aframe-1.3.0.min.js"></script>
+    <script src="build/build.js?v=6"></script>
+  </head>
+  <body>
+    <main id="landing" aria-label="幕影记">
+      <div class="landingGlow" aria-hidden="true"></div>
+      <img id="landingLogo" src="assets/shadowplay/brand/muyingji-logo.svg" alt="幕影记">
+      <div class="landingActions">
+        <button id="landingStartButton" type="button" disabled>正在准备</button>
+        <button id="enterXRButton" type="button">进入 XR</button>
+      </div>
+    </main>
+    <div id="app"></div>
+  </body>
+</html>

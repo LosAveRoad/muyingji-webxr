@@ -1,0 +1,36 @@
+<a-entity
+  id="loadingSongInfoContainer"
+  bind__visible="isLoading"
+  position="0 1.5 -2">
+  <a-entity
+    geometry="primitive: plane; width: 1.5; height: 0.55"
+    material="color: #050403; shader: flat"
+    position="0 0 -0.01"></a-entity>
+
+  <a-entity
+    id="loadingText"
+    mixin="font"
+    bind__text="value: loadingText"
+    text="align: center; color: #D4AF37; value: LOADING; width: 0.8"
+    render-order="menutext"
+    position="0 0.08 0"></a-entity>
+
+  <a-entity
+    id="zipLoaderIndicator"
+    bind__visible="isZipFetching"
+    geometry="primitive: plane; height: 0.12; width: 0.12"
+    material="shader: ring; color: #D4AF37; radiusInner: 0.2; radiusOuter: 0.9; progress: 0; transparent: true"
+    render-order="menuitem"
+    position="0 -0.12 0.002"></a-entity>
+
+  <a-entity
+    id="songProcessingIndicator"
+    bind__animation__spin="enabled: isSongProcessing"
+    bind__visible="isSongProcessing"
+    animation__spin="property: object3D.rotation.z; from: 0; to: -360; easing: linear; dur: 1000; loop: true"
+    geometry="primitive: plane; height: 0.12; width: 0.12"
+    material="shader: ring; color: #D4AF37; radiusInner: 0.2; radiusOuter: 0.4; transparent: true; progress: 0.2"
+    render-order="menutext"
+    position="0 -0.12 0.004"
+    visible="false"></a-entity>
+</a-entity>

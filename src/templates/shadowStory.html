@@ -1,0 +1,43 @@
+<a-entity id="shadowStoryStage" shadow-story position="0 0 -6">
+  <!-- 三层背景以不同 Z 深度进入舞台：远天、月、近园。 -->
+  <a-plane class="storyAsset" data-story-id="backdrop" data-entry="down"
+    width="11.6" height="6.5" position="0 0 -0.9"
+    material="shader: flat; src: url(assets/shadowplay/stage/s1-back.png); transparent: true; opacity: 0"></a-plane>
+  <a-circle class="storyAsset" data-story-id="moon" data-entry="down"
+    radius="1.05" position="0 1.55 -0.72"
+    material="shader: flat; color: #d8ab4e; transparent: true; opacity: 0"></a-circle>
+  <a-image class="storyAsset" data-story-id="garden" data-entry="left"
+    src="assets/shadowplay/library/material-22.webp"
+    width="5.2" height="5.2" position="-3.25 -0.05 -0.55"
+    material="shader: flat; transparent: true; opacity: 0; alphaTest: 0.04"></a-image>
+
+  <!-- 可参与叙事的布景同样具备入场、表演、出场。 -->
+  <a-image class="storyAsset" data-story-id="desk" data-entry="left"
+    src="assets/shadowplay/library/material-32.webp"
+    width="2.25" height="2.25" position="-1.65 -1.2 -0.28"
+    material="shader: flat; transparent: true; opacity: 0; alphaTest: 0.04"></a-image>
+  <a-image class="storyAsset" data-story-id="rock" data-entry="right"
+    src="assets/shadowplay/library/material-43.webp"
+    width="2.8" height="2.8" position="3.55 -0.95 -0.38"
+    material="shader: flat; transparent: true; opacity: 0; alphaTest: 0.04"></a-image>
+
+  <!-- 四个角色共享骨骼与动作，但绝不共用皮肤。 -->
+  <a-entity class="storyAsset shadowActor" data-story-id="hero" data-entry="left"
+    position="-1.9 -1.85 -0.08"
+    piying-puppet="height: 3.7; facing: 1; texture: atlas-xiake.png"></a-entity>
+  <a-entity class="storyAsset shadowActor" data-story-id="villain" data-entry="right"
+    position="1.85 -1.85 -0.04"
+    piying-puppet="height: 3.65; facing: -1; texture: yaoling-puppet-atlas.png"></a-entity>
+  <a-entity class="storyAsset shadowActor" data-story-id="general" data-entry="right"
+    position="0.7 -1.86 0"
+    piying-puppet="height: 3.6; facing: -1; texture: atlas-nvjiang.png"></a-entity>
+  <a-entity class="storyAsset shadowActor" data-story-id="elder" data-entry="left"
+    position="-0.65 -1.88 0.04"
+    piying-puppet="height: 3.35; facing: 1; texture: atlas-laozhe.png"></a-entity>
+
+  <a-plane id="shadowHitFlash"
+    width="10.4" height="5.7" position="0 0 0.18"
+    material="shader: flat; color: #f0c060; transparent: true; opacity: 0"></a-plane>
+  <a-plane width="10.8" height="6.08" position="0 0 0.12"
+    material="shader: flat; src: url(assets/shadowplay/stage/s1-front.png); transparent: true; opacity: 0.42"></a-plane>
+</a-entity>
