@@ -1,4 +1,10 @@
-const defaultBeatmap = require('../lib/default-beatmap.json');
+const sourceBeatmap = require('../lib/default-beatmap.json');
+const defaultBeatmap = Object.assign({}, sourceBeatmap, {
+  // 幕影记只保留可击打音符。原谱面的整轨墙体和炸弹会遮挡舞台，
+  // 并可能让经典模式保持在 wall-hit 状态。
+  _obstacles: [],
+  _notes: (sourceBeatmap._notes || []).filter(note => note._type === 0 || note._type === 1)
+});
 
 AFRAME.registerComponent('bundled-song', {
   init: function () {
