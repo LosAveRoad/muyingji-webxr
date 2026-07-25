@@ -177,19 +177,35 @@
               scale="0.001 0.001 0.001">
               <a-entity
                 class="blade blade{{ hand }}"
-                obj-model="obj: #weaponObj"
-                materials="name: {{ hand }}Weapon"
                 render-order="weapon"
                 position="0 -0.43 0">
+                <!-- 轻量短剑：只替换显示几何，碰撞仍沿用原剑柄与剑尖辅助点。 -->
+                <a-box width="0.072" height="0.7" depth="0.022"
+                  material="shader: flat; color: #D4AF37; metalness: 0.25"></a-box>
+                <a-box width="0.025" height="0.66" depth="0.026" position="0 0.015 0.004"
+                  material="shader: flat; color: #241508"></a-box>
+                <a-cone height="0.1" radius-bottom="0" radius-top="0.052"
+                  position="0 -0.4 0"
+                  material="shader: flat; color: #D4AF37"></a-cone>
                 <a-entity class="bladeTipHelper" position="0 -0.45 0"></a-entity>
               </a-entity>
             </a-entity>
 
             <a-entity
               class="bladeHandle"
-              bind__visible="!isPlaying || gameMode === 'classic'"
-              obj-model="obj: #weaponHandleObj"
-              materials="name: {{ hand }}WeaponHandle">
+              bind__visible="!isPlaying || gameMode === 'classic'">
+              <a-box width="0.3" height="0.045" depth="0.075" position="0 -0.035 0"
+                material="shader: flat; color: #D4AF37"></a-box>
+              <a-box width="0.115" height="0.25" depth="0.075" position="0 0.115 0"
+                material="shader: flat; color: #110C08"></a-box>
+              <a-box width="0.13" height="0.028" depth="0.082" position="0 0.055 0"
+                material="shader: flat; color: #8B641E"></a-box>
+              <a-box width="0.13" height="0.028" depth="0.082" position="0 0.12 0"
+                material="shader: flat; color: #8B641E"></a-box>
+              <a-box width="0.13" height="0.028" depth="0.082" position="0 0.185 0"
+                material="shader: flat; color: #8B641E"></a-box>
+              <a-sphere radius="0.075" position="0 0.275 0"
+                material="shader: flat; color: #D4AF37"></a-sphere>
               <a-entity class="bladeHandleHelper"></a-entity>
             </a-entity>
           </a-entity>
