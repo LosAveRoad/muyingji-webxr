@@ -1,6 +1,6 @@
 const STORY = [
-  // 序：月下开卷。每一项严格对应一次击打、一个资产、一个动作意图。
-  ['act1bg', 'enter'], ['act1bg', 'perform'],
+  // 第一幕底景在开演时作为舞台基底就位；此后每一项严格对应一次击打。
+  ['act1bg', 'perform'],
   ['garden', 'enter'], ['garden', 'perform'],
 
   // 第一幕：侠客入园，发现密函。
@@ -84,6 +84,7 @@ AFRAME.registerComponent('shadow-story', {
     this.setCleanReview(false);
     this.showEndCard(false);
     this.reset();
+    this.prepareOpeningStage();
   },
 
   reset: function () {
@@ -99,10 +100,21 @@ AFRAME.registerComponent('shadow-story', {
     });
   },
 
+  prepareOpeningStage: function () {
+    const backdrop = this.assets.act1bg;
+    if (!backdrop) { return; }
+    backdrop.el.object3D.visible = true;
+    backdrop.el.object3D.position.copy(backdrop.home);
+    backdrop.target.copy(backdrop.home);
+    backdrop.opacity = 1;
+    backdrop.targetOpacity = 1;
+    this.setOpacity(backdrop, 1);
+  },
+
   onHit: function () {
-    // 故事结束后从第一幕重新开卷；一个击打永远只执行这一项。
+    // 故事结束后保持舞台终态，避免多余击打把所有资产重置成黑屏。
     if (this.step >= STORY.length) {
-      this.reset();
+      return;
     }
     const [id, intent] = STORY[this.step++];
     const asset = this.assets[id];
@@ -130,6 +142,7 @@ AFRAME.registerComponent('shadow-story', {
     this.showEndCard(false);
     this.setCleanReview(true);
     this.reset();
+    this.prepareOpeningStage();
     this.reviewIndex = 0;
     const firstAt = this.performance.length ? this.performance[0].at : 0;
     this.reviewSequence = (this.performance.length ? this.performance : STORY.map((item, index) => ({
