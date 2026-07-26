@@ -289,7 +289,6 @@ AFRAME.registerComponent('beat', {
     this.poolName = undefined;
     this.returnToPoolTimer = DESTROY_TIME;
     this.rotationAxis = new THREE.Vector3();
-    this.superCutIdx = 0;
     this.startPositionZ = undefined;
     this.warmupTime = 0;
     this.weaponColors = { right: 'blue', left: 'red' };
@@ -297,8 +296,6 @@ AFRAME.registerComponent('beat', {
     this.curveFollowRig = document.getElementById('curveFollowRig');
     this.mineParticles = document.getElementById('mineParticles');
     this.rigContainer = document.getElementById('rigContainer');
-    this.superCuts = document.querySelectorAll('.superCutFx');
-
     this.verticalPositions = this.beatSystem.verticalPositions;
 
     this.explodeEventDetail = {
@@ -537,7 +534,6 @@ AFRAME.registerComponent('beat', {
    * Called by multiple modes (blade, punch).
    */
   score: function (score, percent) {
-    const el = this.el;
     const hitEventDetail = this.hitEventDetail;
 
     score = Math.ceil(parseInt(score, 10) / 10) * 10;
@@ -545,12 +541,9 @@ AFRAME.registerComponent('beat', {
     hitEventDetail.score = score;
     this.queueBeatHitEvent = hitEventDetail;
 
-    // Super FX.
-    if (percent >= 100) {
-      this.superCuts[this.superCutIdx].components.supercutfx.createSuperCut(
-        el.object3D, this.data.color);
-      this.superCutIdx = (this.superCutIdx + 1) % this.superCuts.length;
-    }
+    // The legacy SuperCutFx entities were removed with the scoring UI. Do not
+    // invoke them here: a clean VR hit must never be able to stop A-Frame's
+    // render loop just because an optional visual effect is absent.
   },
 
   /**
